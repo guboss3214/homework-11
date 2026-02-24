@@ -23,7 +23,7 @@ interface AddCommentArgs {
 
 const initialState: UserState = {
     token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
-    isAuthenticated: false, 
+    isAuthenticated: typeof window !== "undefined" ? !!localStorage.getItem("token") : false, 
     profile: null,
     postsUpdatedTrigger: 0,
 };
@@ -98,7 +98,13 @@ const userSlice = createSlice({
       })
       .addCase(getMyProfileInfo.fulfilled, (state, action: PayloadAction<Profile>) => {
         state.profile = action.payload;
-        console.log("Profile info fetched:", action.payload);
+        state.isAuthenticated = true;
+      })
+      .addCase(getMyProfileInfo.rejected, (state) => {
+        state.token = null;
+        state.isAuthenticated = false;
+        state.profile = null;
+        localStorage.removeItem("token");
       })
       .addCase(createPost.fulfilled, (state) => {
         state.postsUpdatedTrigger = Date.now(); 

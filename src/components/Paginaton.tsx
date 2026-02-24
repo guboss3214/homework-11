@@ -1,26 +1,27 @@
 'use client'
 
-import { Pagination as MuiPagination, Stack } from '@mui/material';
+import { Pagination as MuiPagination } from '@mui/material';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-interface Props {
-  count: number;
-  page: number;
-  onChange: (event: React.ChangeEvent<unknown>, value: number) => void;
-}
+export default function Pagination({ count, page }: { count: number, page: number }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-const Pagination = ({ count, page, onChange }: Props) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", value.toString());
+    
+    router.push(`/?${params.toString()}`);
+  };
+
   return (
-    <Stack spacing={2} sx={{ alignItems: 'center', my: 4 }}>
-      <MuiPagination 
-        count={count} 
-        page={page} 
-        onChange={onChange} 
-        color="primary" 
-        variant="outlined" 
-        shape="rounded" 
-      />
-    </Stack>
+    <MuiPagination 
+      count={count} 
+      page={page} 
+      onChange={handlePageChange} 
+      color="primary" 
+      variant="outlined" 
+      shape="rounded" 
+    />
   );
-};
-
-export default Pagination;
+}

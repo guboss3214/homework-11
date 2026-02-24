@@ -38,6 +38,7 @@ const Header = () => {
   const router = useRouter();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -48,6 +49,7 @@ const Header = () => {
     dispatch(logout());
     router.push('/login');
   };
+
 
   return (
     <>
