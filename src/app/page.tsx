@@ -1,4 +1,3 @@
-import ProtectedRoute from "@/components/ProtectedRoute";
 import StripePageClient from "@/components/StripePageClient";
 import { Container, Typography } from "@mui/material";
 
@@ -26,11 +25,11 @@ async function getPosts(page: number) {
 }
 
 export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
-  const currentPage = parseInt(searchParams.page || "1");
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt(resolvedSearchParams.page || "1");
   const { data, totalPages } = await getPosts(currentPage);
 
   return (
-    <ProtectedRoute>
       <Container maxWidth="md" sx={{ py: 6 }}>
         <Typography variant="h4" align="center" fontWeight={800} sx={{ mb: 5 }}>
           Community Feed (SSR)
@@ -42,6 +41,5 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
           currentPage={currentPage}
         />
       </Container>
-    </ProtectedRoute>
   );
 }

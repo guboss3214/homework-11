@@ -2,6 +2,9 @@
 
 import { List, CircularProgress, Box, Typography } from '@mui/material';
 import Comment from './Comment';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import Link from 'next/link';
 
 interface IComment {
   id: number;
@@ -20,6 +23,7 @@ interface CommentStripeProps {
 }
 
 const CommentStripe = ({ comments, loading, currentUserId, onDelete }: CommentStripeProps) => {
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
@@ -31,7 +35,7 @@ const CommentStripe = ({ comments, loading, currentUserId, onDelete }: CommentSt
   if (comments.length === 0) {
     return (
       <Typography variant="body2" sx={{ p: 2, textAlign: 'center', color: 'text.secondary' }}>
-        No comments yet. Be the first to comment!
+        {isAuthenticated ? 'No comments yet. Be the first to comment!' : <Link href="/login">Please log in to comment</Link>}
       </Typography>
     );
   }

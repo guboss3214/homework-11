@@ -13,6 +13,7 @@ import {
 import { AppDispatch, RootState } from "@/store/store";
 import { myPosts } from "@/store/slices/userSlice";
 import Post from "@/components/Post";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 interface IPost {
   id: number;
@@ -74,36 +75,38 @@ const HomePage = () => {
   );
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
-      <Stack spacing={4} sx={{ 
-        width: '100%', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center'
-      }}>
-        {currentPosts.length > 0 ? (
-          currentPosts.map((post) => (
-            <Post key={post.id} post={post} />
-          ))
-        ) : (
-          <Typography textAlign="center">No posts found.</Typography>
-        )}
-      </Stack>
+    <ProtectedRoute>
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Stack spacing={4} sx={{ 
+          width: '100%', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center'
+        }}>
+          {currentPosts.length > 0 ? (
+            currentPosts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))
+          ) : (
+            <Typography textAlign="center">No posts found.</Typography>
+          )}
+        </Stack>
 
-      {count > 1 && (
-        <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
-          <Pagination
-            count={count}
-            page={page}
-            onChange={handleChange}
-            color="primary"
-            size="large"
-            variant="outlined"
-            shape="rounded"
-          />
-        </Box>
-      )}
-    </Container>
+        {count > 1 && (
+          <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
+            <Pagination
+              count={count}
+              page={page}
+              onChange={handleChange}
+              color="primary"
+              size="large"
+              variant="outlined"
+              shape="rounded"
+            />
+          </Box>
+        )}
+      </Container>
+    </ProtectedRoute>
   )
 }
 
