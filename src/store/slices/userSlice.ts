@@ -22,8 +22,8 @@ interface AddCommentArgs {
 }
 
 const initialState: UserState = {
-    token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
-    isAuthenticated: typeof window !== "undefined" ? !!localStorage.getItem("token") : false, 
+    token: null,
+    isAuthenticated: false,
     profile: null,
     postsUpdatedTrigger: 0,
 };
@@ -82,6 +82,13 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    initializeAuth(state) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        state.token = token;
+        state.isAuthenticated = true;
+      }
+    },
     logout(state) {
       state.token = null;
       state.isAuthenticated = false;
@@ -115,5 +122,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, initializeAuth } = userSlice.actions;
 export default userSlice.reducer;

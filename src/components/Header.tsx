@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -33,10 +33,14 @@ const PostSchema = Yup.object().shape({
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<string>('');
+  const [mounted, setMounted] = useState(false);
   
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
+  const showAuth = mounted && isAuthenticated;
+
+  useEffect(() => setMounted(true), []);
 
 
   const handleOpen = () => setOpen(true);
@@ -60,7 +64,7 @@ const Header = () => {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-            {isAuthenticated && (
+            {showAuth && (
               <>
                 <MuiLink
                   component={Link}
@@ -81,7 +85,7 @@ const Header = () => {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {isAuthenticated ? (
+            {showAuth ? (
               <>
                 <Button 
                   variant="contained" 

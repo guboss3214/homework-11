@@ -2,11 +2,15 @@
 import { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { store, AppDispatch, RootState } from "@/store/store";
-import { getMyProfileInfo } from "@/store/slices/userSlice";
+import { initializeAuth, getMyProfileInfo } from "@/store/slices/userSlice";
 
 function AuthLogic({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
   const { token, profile } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
 
   useEffect(() => {
     if (token && !profile) {
